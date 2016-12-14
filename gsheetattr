@@ -19,6 +19,7 @@ usage:
 
     $(basename $0) [options] schematic [schematic2 ...]
     $(basename $0) --pages *.sch  # update page attrs for all sch files in dir
+    $(basename $0) --title 'My design' my.sch  # set title of schematic
 
 options:
 
@@ -29,9 +30,9 @@ options:
     --project VAL   set project attr 
     --revision VAL  set revision attr 
     --title VAL     set title attr 
-
-    -v, --verbose   increase verbosity
+    -v              increase verbosity
     -h, --help      print this message and exit
+    -V              print version and exit
     --              options terminator
 
 description of supported sheet attributes
@@ -74,9 +75,12 @@ while [[ $1 == -* ]]; do
             title="$2"
             shift  # past value
             ;;
-        -v|--verbose)
+        -V)
+            echo "$(basename $0) v$VERSION"
+            exit
+            ;;
+        -v)
             ((verbose+=1))
-            # do not shift again!
             ;;
         -h|--help)
             echo "$USAGE"
