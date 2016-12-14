@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # schattr - Update sheet attributes in one or more schematics
+# https://github.com/thefekete/geda-schattr
 
 # This program is free software. It comes without any warranty, to the extent
 # permitted by applicable law. You can redistribute it and/or modify it under
