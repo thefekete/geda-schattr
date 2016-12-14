@@ -8,6 +8,8 @@
 # the terms of the Do What The Fuck You Want To Public License, Version 2, as
 # published by Sam Hocevar. See http://www.wtfpl.net/ for more details.
 
+verb() { (($verbose>0)) && echo $* || true; }
+
 pages=false
 verbose=0
 VERSION="0.1"
@@ -119,7 +121,9 @@ done
 ###############
 i=1
 numfiles=$#
+verb "Updating $numfiles schematics"
 for f in "$@"; do
+    verb -n "$f... "
     # if date not given, set to file mtime
     test -z "$date" && date=$(stat --printf='%y' $f | cut -d' ' -f1)
     sed -i -f <(
@@ -138,5 +142,6 @@ for f in "$@"; do
         test -z "$title" \
             || echo "s/\(sheet-title\)=.*/\1=$title/"
     ) $f
+    verb "OK"
     ((i+=1))
 done
