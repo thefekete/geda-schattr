@@ -22,20 +22,13 @@ usage:
 
 options:
 
-    --checkedby VAL             set checkedby to VAL
-    --checkedcomment VAL        set checkedcomment attr 
-    --checkeddate VAL           set checkeddate attr 
-    --drawnby VAL               set drawnby attr 
-    --drawncomment VAL          set drawncomment attr 
-    --drawndate VAL             set drawndate attr (def: file mtime)
-    --filename VAL              set filename attr 
-    --mfgapprovedby VAL         set mfgapprovedby to VAL
-    --mfgapprovedcomment VAL    set mfgapprovedcomment attr 
-    --mfgapproveddate VAL       set mfgapproveddate attr 
-    --pages VAL                 set pagenumber and pagetotal attrs
-    --project VAL               set project attr 
-    --revision VAL              set revision attr 
-    --title VAL                 set title attr 
+    --author VAL    set author attr 
+    --date VAL      set date attr (def: file mtime)
+    --filename VAL  set filename attr 
+    --pages VAL     set pagenumber and pagetotal attrs
+    --project VAL   set project attr 
+    --revision VAL  set revision attr 
+    --title VAL     set title attr 
 
     -v, --verbose   increase verbosity
     -h, --help      print this message and exit
@@ -43,21 +36,14 @@ options:
 
 description of supported sheet attributes
 
-    sheet-project - project name (same for all schematics)
-    sheet-title - schematic's title
-    sheet-filename - schematics filename
-    sheet-revision - project revision number (same for all schematics)
-    sheet-pagenumber - schematic's page number
-    sheet-pagetotal - number of schematics in project
-    sheet-drawnby - schematic's author
-    sheet-drawndate - schematics last modification
-    sheet-drawncomment - comment about schematic drawing
-    sheet-checkedby - schematic checker's name
-    sheet-checkeddate - date schematic was checked
-    sheet-checkedcomment - comment from checking
-    sheet-mfgapprovedby - approved for manufacturing by
-    sheet-mfgapproveddate - date for approval
-    sheet-mfgapprovedcomment - comment about approval
+    sheet-author        schematic's author
+    sheet-date          schematics last modification
+    sheet-filename      schematics filename
+    sheet-pagenumber    schematic's page number
+    sheet-pagetotal     number of schematics in project
+    sheet-project       project name (same for all schematics)
+    sheet-revision      project revision number (same for all schematics)
+    sheet-title         schematic's title
 "
 
 #################
@@ -65,40 +51,12 @@ description of supported sheet attributes
 #################
 while [[ $1 == -* ]]; do
     case $1 in
-        --checkedby)
-            checkedby="$2"
+        --author)
+            author="$2"
             shift  # past value
             ;;
-        --checkedcomment)
-            checkedcomment="$2"
-            shift  # past value
-            ;;
-        --checkeddate)
-            checkeddate="$2"
-            shift  # past value
-            ;;
-        --drawnby)
-            drawnby="$2"
-            shift  # past value
-            ;;
-        --drawncomment)
-            drawncomment="$2"
-            shift  # past value
-            ;;
-        --drawndate)
-            drawndate="$2"
-            shift  # past value
-            ;;
-        --mfgapprovedby)
-            mfgapprovedby="$2"
-            shift  # past value
-            ;;
-        --mfgapprovedcomment)
-            mfgapprovedcomment="$2"
-            shift  # past value
-            ;;
-        --mfgapproveddate)
-            mfgapproveddate="$2"
+        --date)
+            date="$2"
             shift  # past value
             ;;
         --pages)
@@ -137,6 +95,9 @@ while [[ $1 == -* ]]; do
 done
 # all options have been shifted out, so just arguments are left in $@
 
+################
+# Sanity Check #
+################
 if [ $# -lt 1 ]; then
     >&2 echo "no files to update, exiting"
     exit 1
@@ -151,31 +112,16 @@ done
 ###############
 # Main Script #
 ###############
-
 i=1
 numfiles=$#
 for f in "$@"; do
     # if date not given, set to file mtime
-    test -z "$drawndate" && drawndate=$(stat --printf='%y' $f | cut -d' ' -f1)
+    test -z "$date" && date=$(stat --printf='%y' $f | cut -d' ' -f1)
     sed -i -f <(
         echo "s/\(sheet-filename\)=.*/\1=$(basename $f)/"
-        echo "s/\(sheet-drawndate\)=.*/\1=$drawndate/"
-        test -z "$checkedby" \
-            || echo "s/\(sheet-checkedby\)=.*/\1=$checkedby/"
-        test -z "$checkedcomment" \
-            || echo "s/\(sheet-checkedcomment\)=.*/\1=$checkedcomment/"
-        test -z "$checkeddate" \
-            || echo "s/\(sheet-checkeddate\)=.*/\1=$checkeddate/"
-        test -z "$drawnby" \
-            || echo "s/\(sheet-drawnby\)=.*/\1=$drawnby/"
-        test -z "$drawncomment" \
-            || echo "s/\(sheet-drawncomment\)=.*/\1=$drawncomment/"
-        test -z "$mfgapprovedby" \
-            || echo "s/\(sheet-mfgapprovedby\)=.*/\1=$mfgapprovedby/"
-        test -z "$mfgapprovedcomment" \
-            || echo "s/\(sheet-mfgapprovedcomment\)=.*/\1=$mfgapprovedcomment/"
-        test -z "$mfgapproveddate" \
-            || echo "s/\(sheet-mfgapproveddate\)=.*/\1=$mfgapproveddate/"
+        echo "s/\(sheet-date\)=.*/\1=$date/"
+        test -z "$author" \
+            || echo "s/\(sheet-author\)=.*/\1=$author/"
         test $pages = true \
             && echo "s/\(sheet-pagenumber\)=.*/\1=$i/"
         test $pages = true \

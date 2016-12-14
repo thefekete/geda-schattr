@@ -12,22 +12,6 @@ sheet-pagenumber=~
 T 0 1000 8 10 1 0 0 0 1
 sheet-pagetotal=~
 T 0 1200 8 10 1 0 0 0 1
-sheet-drawnby=~
+sheet-author=~
 T 0 1400 8 10 1 0 0 0 1
-sheet-drawndate=~
-T 0 1600 8 10 1 0 0 0 1
-sheet-drawncomment=~
-T 0 1800 8 10 1 0 0 0 1
-sheet-checkedby=~
-T 0 2000 8 10 1 0 0 0 1
-sheet-checkeddate=~
-T 0 2200 8 10 1 0 0 0 1
-sheet-checkedcomment=~
-T 0 2400 8 10 1 0 0 0 1
-sheet-mfgapprovedby=~
-T 0 2600 8 10 1 0 0 0 1
-sheet-mfgapproveddate=~
-T 0 2800 8 10 1 0 0 0 1
-sheet-mfgapprovedcomment=~
-T 0 3000 8 10 1 0 0 0 1
-sheet-copyright=~
+sheet-date=~

@@ -31,8 +31,8 @@ for f in $tmp/*; do
     check "$f" sheet-pagenumber "~"
     check "$f" sheet-pagetotal "~"
     check "$f" sheet-filename "$(basename $f)"
-    check "$f" sheet-drawndate $date
-    check "$f" sheet-drawnby "~"
+    check "$f" sheet-date $date
+    check "$f" sheet-author "~"
 
 done
 rm -rf $tmp/*
@@ -49,8 +49,8 @@ for f in $tmp/*; do
     check "$f" sheet-pagenumber "$i"
     check "$f" sheet-pagetotal "$numfiles"
     check "$f" sheet-filename "$(basename $f)"
-    check "$f" sheet-drawndate "$(date +%Y-%m-%d)"
-    check "$f" sheet-drawnby "~"
+    check "$f" sheet-date "$(date +%Y-%m-%d)"
+    check "$f" sheet-author "~"
 
     ((i+=1))
 done
@@ -62,58 +62,16 @@ echo "Checking filename.sch"
 check $tmp/filename.sch sheet-filename "filename.sch"
 rm -rf $tmp/*
 
-cp testfile.sch $tmp/checkedby.sch
-./gsheetattr --checkedby "my checkedby" $tmp/checkedby.sch
-echo "Checking checkedby.sch"
-check $tmp/checkedby.sch sheet-checkedby "my checkedby"
+cp testfile.sch $tmp/author.sch
+./gsheetattr --author "my author" $tmp/author.sch
+echo "Checking author.sch"
+check $tmp/author.sch sheet-author "my author"
 rm -rf $tmp/*
 
-cp testfile.sch $tmp/checkedcomment.sch
-./gsheetattr --checkedcomment "my checkedcomment" $tmp/checkedcomment.sch
-echo "Checking checkedcomment.sch"
-check $tmp/checkedcomment.sch sheet-checkedcomment "my checkedcomment"
-rm -rf $tmp/*
-
-cp testfile.sch $tmp/checkeddate.sch
-./gsheetattr --checkeddate "my checkeddate" $tmp/checkeddate.sch
-echo "Checking checkeddate.sch"
-check $tmp/checkeddate.sch sheet-checkeddate "my checkeddate"
-rm -rf $tmp/*
-
-cp testfile.sch $tmp/drawnby.sch
-./gsheetattr --drawnby "my drawnby" $tmp/drawnby.sch
-echo "Checking drawnby.sch"
-check $tmp/drawnby.sch sheet-drawnby "my drawnby"
-rm -rf $tmp/*
-
-cp testfile.sch $tmp/drawncomment.sch
-./gsheetattr --drawncomment "my drawncomment" $tmp/drawncomment.sch
-echo "Checking drawncomment.sch"
-check $tmp/drawncomment.sch sheet-drawncomment "my drawncomment"
-rm -rf $tmp/*
-
-cp testfile.sch $tmp/drawndate.sch
-./gsheetattr --drawndate "my drawndate" $tmp/drawndate.sch
-echo "Checking drawndate.sch"
-check $tmp/drawndate.sch sheet-drawndate "my drawndate"
-rm -rf $tmp/*
-
-cp testfile.sch $tmp/mfgapprovedby.sch
-./gsheetattr --mfgapprovedby "my mfgapprovedby" $tmp/mfgapprovedby.sch
-echo "Checking mfgapprovedby.sch"
-check $tmp/mfgapprovedby.sch sheet-mfgapprovedby "my mfgapprovedby"
-rm -rf $tmp/*
-
-cp testfile.sch $tmp/mfgapprovedcomment.sch
-./gsheetattr --mfgapprovedcomment "my mfgapprovedcomment" $tmp/mfgapprovedcomment.sch
-echo "Checking mfgapprovedcomment.sch"
-check $tmp/mfgapprovedcomment.sch sheet-mfgapprovedcomment "my mfgapprovedcomment"
-rm -rf $tmp/*
-
-cp testfile.sch $tmp/mfgapproveddate.sch
-./gsheetattr --mfgapproveddate "my mfgapproveddate" $tmp/mfgapproveddate.sch
-echo "Checking mfgapproveddate.sch"
-check $tmp/mfgapproveddate.sch sheet-mfgapproveddate "my mfgapproveddate"
+cp testfile.sch $tmp/date.sch
+./gsheetattr --date "my date" $tmp/date.sch
+echo "Checking date.sch"
+check $tmp/date.sch sheet-date "my date"
 rm -rf $tmp/*
 
 cp testfile.sch $tmp/project.sch
