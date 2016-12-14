@@ -8,7 +8,9 @@ A bash shell script to update sheet attributes in one or more gEDA gschem schema
 usage:
 ------
 
-To start, add any of the following attributes to your schematic:
+Download the `schattr` script file and put it somewhere in your path.
+
+Then, add any of the following attributes to your schematic:
 
   * sheet-author
   * sheet-date
