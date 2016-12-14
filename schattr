@@ -1,0 +1,141 @@
+#!/bin/bash
+
+# schattr - Update sheet attributes in one or more schematics
+
+# This program is free software. It comes without any warranty, to the extent
+# permitted by applicable law. You can redistribute it and/or modify it under
+# the terms of the Do What The Fuck You Want To Public License, Version 2, as
+# published by Sam Hocevar. See http://www.wtfpl.net/ for more details.
+
+pages=false
+verbose=0
+VERSION="0.1"
+USAGE="
+$(basename $0) version $VERSION
+
+Update sheet attributes in one or more schematics
+
+usage:
+
+    $(basename $0) [options] schematic [schematic2 ...]
+    $(basename $0) --pages *.sch  # update page attrs for all sch files in dir
+    $(basename $0) --title 'My design' my.sch  # set title of schematic
+
+options:
+
+    --author VAL    set author attr 
+    --date VAL      set date attr (def: file mtime)
+    --filename VAL  set filename attr 
+    --pages VAL     set pagenumber and pagetotal attrs
+    --project VAL   set project attr 
+    --revision VAL  set revision attr 
+    --title VAL     set title attr 
+    -v              increase verbosity
+    -h, --help      print this message and exit
+    -V              print version and exit
+    --              options terminator
+
+description of supported sheet attributes
+
+    sheet-author        schematic's author
+    sheet-date          schematics last modification
+    sheet-filename      schematics filename
+    sheet-pagenumber    schematic's page number
+    sheet-pagetotal     number of schematics in project
+    sheet-project       project name (same for all schematics)
+    sheet-revision      project revision number (same for all schematics)
+    sheet-title         schematic's title
+"
+
+#################
+# Parse Options #
+#################
+while [[ $1 == -* ]]; do
+    case $1 in
+        --author)
+            author="$2"
+            shift  # past value
+            ;;
+        --date)
+            date="$2"
+            shift  # past value
+            ;;
+        --pages)
+            pages=true
+            ;;
+        --project)
+            project="$2"
+            shift  # past value
+            ;;
+        --rev)
+            revision="$2"
+            shift  # past value
+            ;;
+        --title)
+            title="$2"
+            shift  # past value
+            ;;
+        -V)
+            echo "$(basename $0) v$VERSION"
+            exit
+            ;;
+        -v)
+            ((verbose+=1))
+            ;;
+        -h|--help)
+            echo "$USAGE"
+            exit
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            >&2 echo "$(basename $0): unknown option $1" \
+                "(run '$(basename $0) --help' for available options)"
+            exit 1
+    esac
+    shift
+done
+# all options have been shifted out, so just arguments are left in $@
+
+################
+# Sanity Check #
+################
+if [ $# -lt 1 ]; then
+    >&2 echo "no files to update, exiting"
+    exit 1
+fi
+for f in "$@"; do
+    if ! [ -f $f ]; then
+        >&2 echo "$f is not a regular file, exiting"
+        exit 1
+    fi
+done
+
+###############
+# Main Script #
+###############
+i=1
+numfiles=$#
+for f in "$@"; do
+    # if date not given, set to file mtime
+    test -z "$date" && date=$(stat --printf='%y' $f | cut -d' ' -f1)
+    sed -i -f <(
+        echo "s/\(sheet-filename\)=.*/\1=$(basename $f)/"
+        echo "s/\(sheet-date\)=.*/\1=$date/"
+        test -z "$author" \
+            || echo "s/\(sheet-author\)=.*/\1=$author/"
+        test $pages = true \
+            && echo "s/\(sheet-pagenumber\)=.*/\1=$i/"
+        test $pages = true \
+            && echo "s/\(sheet-pagetotal\)=.*/\1=$numfiles/"
+        test -z "$project" \
+            || echo "s/\(sheet-project\)=.*/\1=$project/"
+        test -z "$revision" \
+            || echo "s/\(sheet-revision\)=.*/\1=$revision/"
+        test -z "$title" \
+            || echo "s/\(sheet-title\)=.*/\1=$title/"
+    ) $f
+    ((i+=1))
+done
