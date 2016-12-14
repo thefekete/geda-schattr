@@ -1,14 +1,7 @@
 #!/bin/bash
 
-###################
-# Option Defailts #
-###################
 pages=false
 verbose=0
-
-###################
-# Version & Usage #
-###################
 VERSION="0.1"
 USAGE="
 $(basename $0) version $VERSION
