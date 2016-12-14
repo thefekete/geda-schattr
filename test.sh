@@ -24,7 +24,7 @@ cp testfile.sch $tmp/f2.sch
 cp testfile.sch $tmp/f3.sch
 date="2001-02-03"
 touch -m -d "$date" $tmp/*
-./gsheetattr $tmp/*
+./schattr $tmp/*
 for f in $tmp/*; do
     echo "Checking no options (date and filename)"
 
@@ -40,7 +40,7 @@ rm -rf $tmp/*
 cp testfile.sch $tmp/f1.sch
 cp testfile.sch $tmp/f2.sch
 cp testfile.sch $tmp/f3.sch
-./gsheetattr --pages $tmp/*
+./schattr --pages $tmp/*
 numfiles=$(ls -l $tmp/* | wc -l)
 i=1
 for f in $tmp/*; do
@@ -57,25 +57,25 @@ done
 rm -rf $tmp/*
 
 cp testfile.sch $tmp/filename.sch
-./gsheetattr $tmp/filename.sch
+./schattr $tmp/filename.sch
 echo "Checking filename.sch"
 check $tmp/filename.sch sheet-filename "filename.sch"
 rm -rf $tmp/*
 
 cp testfile.sch $tmp/author.sch
-./gsheetattr --author "my author" $tmp/author.sch
+./schattr --author "my author" $tmp/author.sch
 echo "Checking author.sch"
 check $tmp/author.sch sheet-author "my author"
 rm -rf $tmp/*
 
 cp testfile.sch $tmp/date.sch
-./gsheetattr --date "my date" $tmp/date.sch
+./schattr --date "my date" $tmp/date.sch
 echo "Checking date.sch"
 check $tmp/date.sch sheet-date "my date"
 rm -rf $tmp/*
 
 cp testfile.sch $tmp/project.sch
-./gsheetattr --project "my project" $tmp/*
+./schattr --project "my project" $tmp/*
 for f in $tmp/*; do
     echo "Checking $(basename $f)"
     check "$f" sheet-project "my project"
@@ -83,7 +83,7 @@ done
 rm -rf $tmp/*
 
 cp testfile.sch $tmp/revision.sch
-./gsheetattr --rev "my revision" $tmp/*
+./schattr --rev "my revision" $tmp/*
 for f in $tmp/*; do
     echo "Checking $(basename $f)"
     check "$f" sheet-revision "my revision"
@@ -91,7 +91,7 @@ done
 rm -rf $tmp/*
 
 cp testfile.sch $tmp/title.sch
-./gsheetattr --title "my title" $tmp/*
+./schattr --title "my title" $tmp/*
 for f in $tmp/*; do
     echo "Checking $(basename $f)"
     check "$f" sheet-title "my title"
